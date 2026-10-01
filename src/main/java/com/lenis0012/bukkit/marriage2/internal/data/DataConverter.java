@@ -1,6 +1,5 @@
 package com.lenis0012.bukkit.marriage2.internal.data;
 
-import com.google.common.collect.Maps;
 import com.lenis0012.bukkit.marriage2.MData;
 import com.lenis0012.bukkit.marriage2.internal.MarriageCore;
 import com.lenis0012.bukkit.marriage2.misc.UUIDFetcher;
@@ -13,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -37,7 +37,7 @@ public class DataConverter {
         core.getLogger().log(Level.INFO, "Converting " + totalFiles + " old database entries...");
 
         // Retrieve UUIDs from mojang
-        Map<String, UUID> uuidMap = Maps.newHashMap();
+        Map<String, UUID> uuidMap = new HashMap<String, UUID>();
         UUIDFetcher uuidFetcher = new UUIDFetcher(new ArrayList<String>());
         int ranThroughMojang = 0;
         int failed = 0;

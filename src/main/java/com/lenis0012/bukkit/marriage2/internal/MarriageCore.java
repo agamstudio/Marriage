@@ -120,12 +120,24 @@ public class MarriageCore extends MarriageBase {
 
     @Register(name = "database", type = Register.Type.ENABLE)
     public void loadDatabase() {
-        this.dataManager = new DataManager(this);
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            getLogger().log(Level.SEVERE, "SQLite driver is missing from the plugin jar", e);
+        }
+        try {
+            this.dataManager = new DataManager(this);
+        } catch (RuntimeException e) {
+            getLogger().log(Level.SEVERE, "Failed to open the marriage database", e);
+            return;
+        }
 
         // Load all players
         for(Player player : Bukkit.getOnlinePlayers()) {
             MarriagePlayer mp = dataManager.loadPlayer(player.getUniqueId());
-            setMPlayer(player.getUniqueId(), mp);
+            if(mp != null) {
+                setMPlayer(player.getUniqueId(), mp);
+            }
         }
     }
 
@@ -220,23 +232,40 @@ public class MarriageCore extends MarriageBase {
             return getMPlayer(player);
         }
 
-        MarriagePlayer mp = players.get(uuid);
-        if(mp == null) {
-            // Load from database, but don't save.
-            mp = dataManager.loadPlayer(uuid);
-        }
-
-        return mp;
+        return loadMPlayer(uuid, null);
     }
 
     @Override
     public MPlayer getMPlayer(Player player) {
-        MarriagePlayer mp = players.get(player.getUniqueId());
-        if(mp == null) {
-            mp = dataManager.loadPlayer(player.getUniqueId());
-            players.put(player.getUniqueId(), mp);
+        return loadMPlayer(player.getUniqueId(), player.getName());
+    }
+
+    private MPlayer loadMPlayer(UUID uuid, String name) {
+        MarriagePlayer mp = players.get(uuid);
+        if(mp != null && mp.isLoaded()) {
+            return mp;
         }
 
+        MarriagePlayer loaded = null;
+        if(dataManager != null) {
+            loaded = dataManager.loadPlayer(uuid);
+        }
+        if(loaded != null) {
+            if(mp != null) {
+                loaded.setLastName(mp.getLastName());
+            }
+            players.put(uuid, loaded);
+            return loaded;
+        }
+
+        if(mp == null) {
+            getLogger().log(Level.WARNING, "Could not load marriage data for " + (name != null ? name : uuid) + ". The database did not return a player.");
+            mp = new MarriagePlayer(uuid);
+            if(name != null) {
+                mp.setLastName(name);
+            }
+            players.put(uuid, mp);
+        }
         return mp;
     }
 

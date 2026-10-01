@@ -1,11 +1,11 @@
 package com.lenis0012.bukkit.marriage2.internal;
 
-import com.google.common.collect.Lists;
 import com.lenis0012.bukkit.marriage2.Marriage;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -24,7 +24,7 @@ public class MarriagePlugin extends JavaPlugin {
 
         //Scan methods
         for(int i = 0; i < methods.length; i++) {
-            methods[i] = Lists.newArrayList();
+            methods[i] = new ArrayList<Method>();
         }
         scanMethods(core.getClass());
     }
@@ -58,6 +58,7 @@ public class MarriagePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         executeMethods(Register.Type.ENABLE);
+        getLogger().info("Compatible with Minecraft 1.20 through 26.3, including 1.21.x.");
     }
 
     @Override
@@ -66,7 +67,7 @@ public class MarriagePlugin extends JavaPlugin {
     }
 
     private void executeMethods(Register.Type type) {
-        List<Method> list = Lists.newArrayList(methods[type.ordinal()]);
+        List<Method> list = new ArrayList<Method>(methods[type.ordinal()]);
         while(!list.isEmpty()) {
             Method method = null;
             int lowestPriority = Integer.MAX_VALUE;

@@ -1,15 +1,12 @@
 package com.lenis0012.bukkit.marriage2.misc;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-
 import java.util.concurrent.TimeUnit;
 
 public class Cooldown<T> {
-    private final Cache<T, Boolean> cache;
+    private final ExpiringCache<T, Boolean> cache;
 
     public Cooldown(long cooldownTime, TimeUnit unit) {
-        this.cache = CacheBuilder.newBuilder().expireAfterWrite(cooldownTime, unit).build();
+        this.cache = new ExpiringCache<T, Boolean>(cooldownTime, unit);
     }
 
     /**

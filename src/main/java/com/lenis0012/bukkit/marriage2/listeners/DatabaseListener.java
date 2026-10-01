@@ -1,11 +1,10 @@
 package com.lenis0012.bukkit.marriage2.listeners;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.lenis0012.bukkit.marriage2.MPlayer;
 import com.lenis0012.bukkit.marriage2.internal.MarriageCore;
 import com.lenis0012.bukkit.marriage2.internal.data.DataManager;
 import com.lenis0012.bukkit.marriage2.internal.data.MarriagePlayer;
+import com.lenis0012.bukkit.marriage2.misc.ExpiringCache;
 import com.lenis0012.bukkit.marriage2.misc.ListQuery;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -23,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 public class DatabaseListener implements Listener {
-    private final Cache<UUID, MarriagePlayer> cache = CacheBuilder.newBuilder().expireAfterWrite(30L, TimeUnit.SECONDS).build();
+    private final ExpiringCache<UUID, MarriagePlayer> cache = new ExpiringCache<UUID, MarriagePlayer>(30L, TimeUnit.SECONDS);
     private final MarriageCore core;
 
     public DatabaseListener(MarriageCore core) {

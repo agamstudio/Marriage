@@ -1,14 +1,11 @@
 package com.lenis0012.bukkit.marriage2.internal.data;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.lenis0012.bukkit.marriage2.MData;
 import com.lenis0012.bukkit.marriage2.PlayerGender;
 import com.lenis0012.bukkit.marriage2.internal.MarriageCore;
 import com.lenis0012.bukkit.marriage2.internal.MarriagePlugin;
 import com.lenis0012.bukkit.marriage2.misc.BConfig;
+import com.lenis0012.bukkit.marriage2.misc.ExpiringCache;
 import com.lenis0012.bukkit.marriage2.misc.ListQuery;
 import com.lenis0012.pluginutils.sql.DataSourceBuilder;
 import org.bukkit.Bukkit;
@@ -38,7 +35,7 @@ public class DataManager {
     }
 
     // Create a data cache to overlap with the pre join event cache
-    private final Cache<UUID, MarriageData> marriageDataCache = CacheBuilder.newBuilder().expireAfterWrite(60L, TimeUnit.SECONDS).build();
+    private final ExpiringCache<UUID, MarriageData> marriageDataCache = new ExpiringCache<UUID, MarriageData>(60L, TimeUnit.SECONDS);
     private final MarriageCore core;
     private DataSource dataSource;
     private String prefix;
@@ -301,7 +298,7 @@ public class DataManager {
             //"SELECT * FROM %sdata ORDER BY id DESC LIMIT %s OFFSET %s;", prefix, scale, scale * page));
             result = ps.executeQuery();
 
-            List<MData> list = Lists.newArrayList();
+            List<MData> list = new ArrayList<MData>();
             while(result.next()) {
                 list.add(new MarriageData(this, result));
             }

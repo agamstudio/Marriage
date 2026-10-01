@@ -1,6 +1,5 @@
 package com.lenis0012.bukkit.marriage2.commands;
 
-import com.google.common.collect.Lists;
 import com.lenis0012.bukkit.marriage2.Marriage;
 import com.lenis0012.bukkit.marriage2.config.Message;
 import com.lenis0012.bukkit.marriage2.config.Permissions;
@@ -31,7 +30,9 @@ public abstract class Command {
 
     public Command(Marriage marriage, String command, String... aliases) {
         this.marriage = marriage;
-        this.aliases = Lists.asList(command, aliases).toArray(new String[0]);
+        this.aliases = new String[aliases.length + 1];
+        this.aliases[0] = command;
+        System.arraycopy(aliases, 0, this.aliases, 1, aliases.length);
         this.permission = Permissions.getByNode("marry." + command);
     }
 

@@ -29,9 +29,18 @@ public class MarriagePlayer implements MPlayer {
     private boolean priest;
     private long lastLogin;
     private long lastLogout;
+    private final boolean loaded;
+
+    public MarriagePlayer(UUID uuid) {
+        this.uuid = uuid;
+        this.loaded = false;
+        this.lastLogin = System.currentTimeMillis();
+        this.requests = new Cooldown<>(Settings.REQUEST_EXPIRY.value(), TimeUnit.SECONDS);
+    }
 
     public MarriagePlayer(UUID uuid, ResultSet data) throws SQLException {
         this.uuid = uuid;
+        this.loaded = true;
         if(data.next()) {
             this.lastName = data.getString("last_name");
             if (data.getString("gender") != null) {
@@ -67,6 +76,10 @@ public class MarriagePlayer implements MPlayer {
     @Override
     public UUID getUniqueId() {
         return uuid;
+    }
+
+    public boolean isLoaded() {
+        return loaded;
     }
 
     @Override

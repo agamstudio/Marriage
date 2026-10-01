@@ -1,6 +1,5 @@
 package com.lenis0012.bukkit.marriage2.internal;
 
-import com.google.common.collect.Maps;
 import com.lenis0012.bukkit.marriage2.Marriage;
 import com.lenis0012.bukkit.marriage2.commands.Command;
 import com.lenis0012.bukkit.marriage2.config.Settings;
@@ -10,12 +9,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
 public class MarriageCommandExecutor implements CommandExecutor {
     private final MarriageCore core;
-    private final Map<String, Command> commands = Maps.newHashMap();
+    private final Map<String, Command> commands = new HashMap<String, Command>();
 
     public MarriageCommandExecutor(MarriageBase core) {
         this.core = (MarriageCore) core;

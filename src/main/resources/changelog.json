@@ -1,15 +1,13 @@
 {
-  "version": "Marriage v2.2.4",
+  "version": "Marriage v2.4.1",
   "data":
   [
     [
       "---[ Changelog ]---",
       "",
-      "- Improved update checker",
+      "- Supports Minecraft 1.20 through 26.3, including every 1.21.x release",
       "",
-      "- Added ability to dismiss update notifications",
-      "",
-      "- Bug fixes and improvements by Altruiis"
+      "- Removed the Guava dependency so the plugin loads on modern Paper"
     ],
     [
       "---[ Support ]---",

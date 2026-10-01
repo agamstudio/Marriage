@@ -1,6 +1,5 @@
 package com.lenis0012.bukkit.marriage2.misc;
 
-import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -22,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +34,7 @@ public class ListQuery {
     private final int pages;
     private final int page;
     private final List<MData> marriages;
-    private final Map<UUID, String> names = Maps.newHashMap();
+    private final Map<UUID, String> names = new HashMap<UUID, String>();
 
     public ListQuery(DataManager db, int pages, int page, List<MData> marriages) {
         this.pages = pages;
